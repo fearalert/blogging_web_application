@@ -17,13 +17,15 @@ export default function RegisterPage() {
   async function handleSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget as HTMLFormElement);
-    const data: RegisterData = {
-        email: formData.get('email') as string,
-        password: formData.get('password') as string,
-      };
+    const data = Object.fromEntries(formData.entries()) as { email: FormDataEntryValue; password: FormDataEntryValue };
+  
+    const userData: RegisterData = {
+      email: String(data.email), 
+      password: String(data.password)
+    };
 
     try {
-      const response = await registerUser(data);
+      const response = await registerUser(userData);
       console.log("Registration successful:", response);
     } catch (err: any) {
       console.error("Registration failed:", err);
