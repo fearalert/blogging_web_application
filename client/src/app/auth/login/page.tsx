@@ -38,7 +38,7 @@ export default function LoginPage() {
       // Redirect or perform additional actions
     } catch (err: any) {
       console.error("Login failed:", err);
-      setError("Login failed. Please check your credentials.");
+      setError(err.message);
     }
   }
   
@@ -56,11 +56,11 @@ export default function LoginPage() {
                 Welcome Back to Blogging Website
               </p>
             </div>
-            {error && <p className="text-red-500 text-center">{error}</p>}
             <UserAuthForm
               formType="login"
               onSubmit={handleSubmit}
             />
+            {error && <p className="text-red-500 text-center">{error}</p>}
             <p className="px-8 text-center text-sm text-muted-foreground">
               or{" "}
               <br />

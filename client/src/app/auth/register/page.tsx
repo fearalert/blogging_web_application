@@ -28,8 +28,8 @@ export default function RegisterPage() {
       const response = await registerUser(userData);
       console.log("Registration successful:", response);
     } catch (err: any) {
-      console.error("Registration failed:", err);
-      setError("Registration failed. Please try again.");
+      console.error("Registration failed:", err.message);
+      setError(err.message);
     }
   }
 
@@ -46,12 +46,11 @@ export default function RegisterPage() {
                 Enter your email below to create your account
               </p>
             </div>
-            {error && <p className="text-red-500 text-center">{error}</p>} {/* Display error message */}
             <UserAuthForm
               formType="register"
               onSubmit={handleSubmit}
             />
-
+            {error && <p className="text-red-500 text-center">{error}</p>}
             <p className="px-8 text-center text-sm text-muted-foreground">
               or{" "}
               <br />
