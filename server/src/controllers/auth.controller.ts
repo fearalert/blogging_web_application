@@ -36,7 +36,24 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   try {
     const { email, password } = req.body;
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    if (!email && !password) {
+      return res.status(400).json({ message: 'Email and Password are required.' });
+    }
+
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required.' });
+    }
+
+    if (!password) {
+      return res.status(400).json({ message: 'Password is required.' });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -54,3 +71,4 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
+

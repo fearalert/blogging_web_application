@@ -2,5 +2,5 @@
     "watch": ["src/**/*"],
     "ignore": ["node_modules/**/*"],
     "exec": "ts-node src/server.ts",
-    "ext": "ts-node src/index.ts"
+    "ext": "ts"
 }
