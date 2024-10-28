@@ -48,3 +48,18 @@ export default tseslint.config({
   },
 })
 ```
+
+## Running the project
+
+Before running the frontend make sure that the backend is running on `http://localhost:4000` and the you can
+run the frontend with the following command
+
+```sh
+npm install
+```
+
+```sh
+npm run dev
+```
+
+This will start the development server and you can access the application at `http://localhost:3000`. Now you can test all the features of the application and make sure that everything is working as expected.

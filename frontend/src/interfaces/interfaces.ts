@@ -13,13 +13,11 @@ export interface LoginResponse {
     token: string;
 }
 
-// interfaces/Tag.ts
 export interface Tag {
     id: number;
     name: string;
 }
 
-// interfaces/Comment.ts
 export interface Comment {
     author: {
         email: string
@@ -31,14 +29,11 @@ export interface Comment {
     createdAt: string;
 }
 
-// interfaces/Author.ts
 export interface Author {
     id: number;
     email: string;
-    password?: string; // Optionally include password if needed
 }
 
-// interfaces/Category.ts
 export interface Category {
     id: number;
     name: string;
@@ -61,10 +56,8 @@ export interface BlogPost {
     }[];
 }
 
-// interfaces/GetBlogPostsResponse.ts
 export type GetBlogPostsResponse = BlogPost[];
 
-// interfaces/Post.ts
 export interface Post {
     id: number;
     title: string;
@@ -80,7 +73,6 @@ export interface Category {
     posts: Post[];
 }
 
-// interfaces/GetCategoriesResponse.ts
 export type GetCategoriesResponse = Category[];
 
 export interface CreateBlogPostResponse {

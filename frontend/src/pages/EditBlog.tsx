@@ -8,8 +8,7 @@ import Navbar from "../components/Navbar";
 const EditBlog = () => {
   const { id } = useParams<{ id: string }>();
   const { user, token } = useAuth();
-/* eslint-disable @typescript-eslint/no-unused-vars */
-  const [blog, setBlog] = useState<BlogPost | null>(null);
+  const [, setBlog] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [title, setTitle] = useState("");
@@ -34,7 +33,6 @@ const EditBlog = () => {
         });
         const fetchedBlog = response.data;
 
-        // Check if the logged-in user is the author
         if (fetchedBlog.authorID !== user.id) {
           setError("You are not authorized to edit this blog.");
           navigate("/blogs");
