@@ -3,7 +3,7 @@ import { createCategory, getCategories, updateCategory, deleteCategory } from '.
 import { createTag, deleteTag, getTags, updateTag } from '../controllers/tag.controller';
 import { createComment, deleteComment, getComments, updateComment } from '../controllers/comment.controller';
 import { login, register } from '../controllers/auth.controller';
-import { createBlogPost, deleteBlogPost, getBlogPosts, updateBlogPost } from '../controllers/blog.controller';
+import { createBlogPost, deleteBlogPost, getBlogPostById, getBlogPosts, updateBlogPost } from '../controllers/blog.controller';
 import { authMiddleware } from '../middlewares/auth.middleware';
 
 const router = Router();
@@ -28,10 +28,12 @@ router.post('/blogs',authMiddleware as any, createBlogPost as any);
 router.get('/blogs', getBlogPosts);
 router.put('/blogs/:id', updateBlogPost as any);
 router.delete('/blogs/:id', deleteBlogPost);
+router.get('/blogs/:id', getBlogPostById as any);
+
 
 // Comment Routes
-router.post('/comments', createComment);
-router.get('/comments/:postId', getComments);
+router.post('/blogs/:postId/comments', createComment);
+router.get('/blogs/:postId/comments', getComments);
 router.put('/comments/:id', updateComment);
 router.delete('/comments/:id', deleteComment);
 

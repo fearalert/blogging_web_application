@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import prisma from '../models/prismaClient';
 
 export const createComment = async (req: Request, res: Response) => {
-    const { content, postID } = req.body;
+    const { content } = req.body;
+    const postID = Number(req.params.postId);
 
     try {
         const comment = await prisma.comment.create({
@@ -25,7 +26,9 @@ export const getComments = async (req: Request, res: Response) => {
     try {
         const comments = await prisma.comment.findMany({
             where: { postID: Number(postId) },
-            include: { author: true },
+            include: { 
+                author: true
+            },
         });
         res.json(comments);
     } catch (error) {
@@ -35,29 +38,29 @@ export const getComments = async (req: Request, res: Response) => {
 };
 
 export const updateComment = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { content } = req.body;
+    const { id } = req.params;
+    const { content } = req.body;
 
-  try {
-      const updatedComment = await prisma.comment.update({
-          where: { id: Number(id) },
-          data: { content },
-      });
-      res.json(updatedComment);
-  } catch (error) {
-      console.error('Error updating comment:', error);
-      res.status(500).json({ error: 'Internal server error' });
-  }
+    try {
+        const updatedComment = await prisma.comment.update({
+            where: { id: Number(id) },
+            data: { content },
+        });
+        res.json(updatedComment);
+    } catch (error) {
+        console.error('Error updating comment:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 };
 
 export const deleteComment = async (req: Request, res: Response) => {
-  const { id } = req.params;
+    const { id } = req.params;
 
-  try {
-      await prisma.comment.delete({ where: { id: Number(id) } });
-      res.status(204).send();
-  } catch (error) {
-      console.error('Error deleting comment:', error);
-      res.status(500).json({ error: 'Internal server error' });
-  }
+    try {
+        await prisma.comment.delete({ where: { id: Number(id) } });
+        res.status(204).send();
+    } catch (error) {
+        console.error('Error deleting comment:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 };

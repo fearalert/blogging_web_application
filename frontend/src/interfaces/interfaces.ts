@@ -21,11 +21,13 @@ export interface Tag {
 
 // interfaces/Comment.ts
 export interface Comment {
+    author: {
+        email: string
+    };
     id: number;
     content: string;
     postID: number;
     authorID: number;
-    authorName?: string;
     createdAt: string;
 }
 

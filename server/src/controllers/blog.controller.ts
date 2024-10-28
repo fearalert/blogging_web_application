@@ -60,7 +60,6 @@ export const updateBlogPost = async (req: Request, res: Response) => {
     const { title, content, categoryID, tags } = req.body;
 
     try {
-        // Check if the blog post exists
         const existingBlogPost = await prisma.blogPost.findUnique({
             where: { id: Number(id) },
         });
@@ -69,7 +68,6 @@ export const updateBlogPost = async (req: Request, res: Response) => {
             return res.status(404).json({ error: 'Blog post not found' });
         }
 
-        // Update the blog post
         const blogPost = await prisma.blogPost.update({
             where: { id: Number(id) },
             data: {
@@ -103,6 +101,39 @@ export const deleteBlogPost = async (req: Request, res: Response) => {
         res.status(204).send();
     } catch (error) {
         console.error('Error deleting blog post:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const getBlogPostById = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    try {
+        const blogPost = await prisma.blogPost.findUnique({
+            where: { id: Number(id) },
+            include: {
+                author: {
+                    select: {
+                        email: true
+                    }                        
+                },
+                comments: true,
+                category: true,
+                tags: {
+                    include: {
+                        tag: true,
+                    },
+                },
+            },
+        });
+
+        if (!blogPost) {
+            return res.status(404).json({ error: 'Blog post not found' });
+        }
+
+        res.json(blogPost);
+    } catch (error) {
+        console.error('Error fetching blog post by ID:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
