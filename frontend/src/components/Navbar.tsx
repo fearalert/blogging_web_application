@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAuth } from "../context/useAuth";
+import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
     const { user, logout } = useAuth();
@@ -12,16 +13,21 @@ const Navbar: React.FC = () => {
                 {user ? (
                     <>
                         <li>
-                            <a href="/home" className="hover:text-blue-500 transition-colors">
+                            <Link to="/home" className="hover:text-blue-500 transition-colors">
                                 Home
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="/create" className="hover:text-blue-500 transition-colors">
-                                Create Post
-                            </a>
+                            <Link to="/blogs" className="hover:text-blue-500 transition-colors">
+                                My Blogs
+                            </Link>
                         </li>
-                        <button 
+                        <li>
+                            <Link to="/create" className="hover:text-blue-500 transition-colors">
+                                Create Post
+                            </Link>
+                        </li>
+                        <button
                             onClick={logout} 
                             className="bg-gradient-to-r from-red-400 to-blue-500 text-white px-4 py-2 rounded-md font-semibold hover:shadow-lg transition">
                             Logout
@@ -30,14 +36,14 @@ const Navbar: React.FC = () => {
                 ) : (
                     <>
                         <li>
-                            <a href="/login" className="hover:text-blue-500 transition-colors">
+                            <Link to="/login" className="hover:text-blue-500 transition-colors">
                                 Login
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="/register" className="hover:text-blue-500 transition-colors">
+                            <Link to="/register" className="hover:text-blue-500 transition-colors">
                                 Register
-                            </a>
+                            </Link>
                         </li>
                     </>
                 )}

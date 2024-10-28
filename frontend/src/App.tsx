@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import CreateBlog from './pages/CreateBlog';
 import MyBlogs from './pages/MyBlogs';
 import BlogDetailPage from './pages/BlogDetail';
+import ProtectedRoute from './context/ProtectedRoute';
 
 const App = () => {
   return (
@@ -17,8 +18,21 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/create-blog" element={<CreateBlog />} />
-          <Route path="/my-blogs" element={<MyBlogs />} />
+          <Route path="/create" element={
+             <ProtectedRoute>
+                <CreateBlog />
+           </ProtectedRoute>
+          } />
+          <Route path="/blogs" element={
+            <ProtectedRoute>
+              <MyBlogs />
+            </ProtectedRoute>
+          } />
+          <Route path="/home" element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          } />
           <Route path="/blog/:id" element={<BlogDetailPage />} />
         </Routes>
       </Router>

@@ -1,10 +1,10 @@
-import { useContext } from "react";
-import { createContext } from 'react';
+import { useContext, createContext } from 'react';
 import { User, LoginResponse } from '../interfaces/interfaces';
 
 interface AuthContextType {
     user: User | null;
     token: string | null;
+    isAuthenticated: boolean;
     login: (response: LoginResponse) => void;
     logout: () => void;
 }
