@@ -26,7 +26,7 @@ router.delete('/tags/:id', deleteTag);
 // Blog Post Routes
 router.post('/blogs',authMiddleware as any, createBlogPost as any);
 router.get('/blogs', getBlogPosts);
-router.put('/blogs/:id', updateBlogPost);
+router.put('/blogs/:id', updateBlogPost as any);
 router.delete('/blogs/:id', deleteBlogPost);
 
 // Comment Routes

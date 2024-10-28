@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../models/prismaClient';
+import { Prisma } from '@prisma/client';
 
 export const createBlogPost = async (req: Request, res: Response) => {
     const { title, content, categoryID, tags } = req.body;
@@ -59,6 +60,16 @@ export const updateBlogPost = async (req: Request, res: Response) => {
     const { title, content, categoryID, tags } = req.body;
 
     try {
+        // Check if the blog post exists
+        const existingBlogPost = await prisma.blogPost.findUnique({
+            where: { id: Number(id) },
+        });
+
+        if (!existingBlogPost) {
+            return res.status(404).json({ error: 'Blog post not found' });
+        }
+
+        // Update the blog post
         const blogPost = await prisma.blogPost.update({
             where: { id: Number(id) },
             data: {
@@ -66,14 +77,20 @@ export const updateBlogPost = async (req: Request, res: Response) => {
                 content,
                 category: { connect: { id: categoryID } },
                 tags: {
-                    set: [], 
+                    set: [],
                     connect: tags.map((tagId: number) => ({ id: tagId })),
                 },
             },
         });
+
         res.json(blogPost);
     } catch (error) {
         console.error('Error updating blog post:', error);
+
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            return res.status(400).json({ error: error.message });
+        }
+
         res.status(500).json({ error: 'Internal server error' });
     }
 };

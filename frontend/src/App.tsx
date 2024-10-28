@@ -8,6 +8,7 @@ import CreateBlog from './pages/CreateBlog';
 import MyBlogs from './pages/MyBlogs';
 import BlogDetailPage from './pages/BlogDetail';
 import ProtectedRoute from './context/ProtectedRoute';
+import EditBlog from './pages/EditBlog';
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
             </ProtectedRoute>
           } />
           <Route path="/blog/:id" element={<BlogDetailPage />} />
+          <Route path="/edit/:id" element={<EditBlog />} />
         </Routes>
       </Router>
     </AuthProvider>
