@@ -71,14 +71,14 @@ const MyBlogs = () => {
       </header>
 
       <main className="flex flex-col items-center py-20 px-4 bg-white min-h-screen">
-        <section className="w-full max-w-4xl">
+        <section className="w-full max-w-6xl">
           {blogs.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {blogs.map((blog) => (
                 <div key={blog.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
                   <div className="h-48 bg-cover bg-center" style={{ backgroundImage: 'url("https://via.placeholder.com/400")' }}></div>
                   <div className="p-6">
-                    <h4 className="text-2xl font-semibold text-gray-800 mb-2">{blog.title}</h4>
+                    <h4 className="text-2xl font-semibold text-gray-800 mb-2">{blog.title.slice(0,40)}...</h4>
                     <p className="text-gray-600 mb-4">{blog.content.slice(0, 100)}...</p>
                     <div className="text-sm text-gray-500 mb-2">
                       <strong>Category:</strong> {blog.category.name}

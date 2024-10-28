@@ -9,6 +9,8 @@ import MyBlogs from './pages/MyBlogs';
 import BlogDetailPage from './pages/BlogDetail';
 import ProtectedRoute from './context/ProtectedRoute';
 import EditBlog from './pages/EditBlog';
+import CategoryManagement from './pages/CategoryManagement';
+import TagManagement from './pages/TagManagement';
 
 const App = () => {
   return (
@@ -32,6 +34,16 @@ const App = () => {
           <Route path="/home" element={
             <ProtectedRoute>
               <Home />
+            </ProtectedRoute>
+          } />
+          <Route path="/categories" element={
+            <ProtectedRoute>
+              <CategoryManagement />
+            </ProtectedRoute>
+          } />
+          <Route path="/tags" element={
+            <ProtectedRoute>
+              <TagManagement />
             </ProtectedRoute>
           } />
           <Route path="/blog/:id" element={<BlogDetailPage />} />
