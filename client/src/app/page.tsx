@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getBlogPosts } from "@/app/api/api";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
 interface Author {
   id: number;
@@ -55,20 +56,23 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Blog Posts</h1>
-      {error && <p className="text-red-500">{error}</p>}
-      <ul className="space-y-4">
-        {blogPosts.map((post) => (
-          <li key={post.id} className="border-b pb-2">
-            <Link href={`/posts/${post.id}`}>
-              <h2 className="text-xl font-semibold">{post.title}</h2>
-            </Link>
-            <p>{post.content.substring(0, 100)}...</p>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <Navbar />
+      <div className="container mx-auto my-8 p-4">
+        <h1 className="text-2xl font-bold mb-4">Blog Posts</h1>
+        {error && <p className="text-red-500">{error}</p>}
+        <ul className="space-y-4">
+          {blogPosts.map((post) => (
+            <li key={post.id} className="border-b pb-2">
+              <Link href={`/posts/${post.id}`}>
+                <h2 className="text-xl font-semibold">{post.title}</h2>
+              </Link>
+              <p>{post.content.substring(0, 100)}...</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 };
 

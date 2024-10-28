@@ -5,6 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { UserAuthForm } from "@/components/AuthForm";
 import { loginUser } from "@/app/api/api";
+import { useToast } from "@/components/toast/toast-provider";
 
 interface LoginData {
   email: string;
@@ -13,6 +14,9 @@ interface LoginData {
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
+
+  const { showToast } = useToast();
+
 
   async function handleSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -34,14 +38,13 @@ export default function LoginPage() {
     try {
       const response = await loginUser(userData);
       console.log("Login successful:", response);
-      // Redirect or perform additional actions
+      showToast("Success", "Login Successful!");
     } catch (err: any) {
       console.error("Login failed:", err);
-      setError(err.message);
+      showToast("Error", err.message);
     }
   }
   
-
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="container flex-col items-center justify-center lg:px-0">
