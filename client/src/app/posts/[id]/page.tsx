@@ -48,7 +48,7 @@ const BlogPostPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <div className="container min-h-screen mx-auto p-4">
-      <Link href="/" className="flex items-center space-x-4  my-4 text-blue-500 hover:text-blue-700 font-medium">
+      <Link href="/" className="flex items-center space-x-4 my-4 text-blue-500 hover:text-blue-700 font-medium">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
