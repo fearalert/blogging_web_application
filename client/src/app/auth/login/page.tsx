@@ -6,7 +6,6 @@ import Link from "next/link";
 import { UserAuthForm } from "@/components/AuthForm";
 import { loginUser } from "@/app/api/api";
 
-// Define the shape of the form data
 interface LoginData {
   email: string;
   password: string;

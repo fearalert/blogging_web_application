@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getBlogPosts } from "@/app/api/api"; 
 import { BlogPost } from "@/app/page";
+import Link from "next/link";
 
 const BlogPostPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [post, setPost] = useState<BlogPost | null>(null);
@@ -47,6 +48,23 @@ const BlogPostPage = ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <div className="container min-h-screen mx-auto p-4">
+      <Link href="/" className="flex items-center space-x-4  my-4 text-blue-500 hover:text-blue-700 font-medium">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            className="w-5 h-5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          <span>Go Back</span>
+        </Link>
       <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
       <div className="flex items-center text-sm text-gray-600 mb-4 border-border border-b">
         <p className="mr-4">By: {post.author.email}</p>
