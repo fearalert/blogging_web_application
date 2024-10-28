@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import { createCategory, getCategories, updateCategory, deleteCategory } from '../controllers/category.controller';
 import { createTag, deleteTag, getTags, updateTag } from '../controllers/tag.controller';
-import { createBlogPost, getBlogPosts, updateBlogPost, deleteBlogPost } from '../controllers/blog.controller';
 import { createComment, deleteComment, getComments, updateComment } from '../controllers/comment.controller';
 import { login, register } from '../controllers/auth.controller';
+import { createBlogPost, deleteBlogPost, getBlogPosts, updateBlogPost } from '../controllers/blog.controller';
+import { authMiddleware } from '../middlewares/auth.middleware';
 
 const router = Router();
 
@@ -23,10 +24,10 @@ router.put('/tags/:id', updateTag);
 router.delete('/tags/:id', deleteTag);
 
 // Blog Post Routes
-router.post('/posts', createBlogPost as any);
-router.get('/posts', getBlogPosts);
-router.put('/posts/:id', updateBlogPost);
-router.delete('/posts/:id', deleteBlogPost);
+router.post('/blogs',authMiddleware as any, createBlogPost as any);
+router.get('/blogs', getBlogPosts);
+router.put('/blogs/:id', updateBlogPost);
+router.delete('/blogs/:id', deleteBlogPost);
 
 // Comment Routes
 router.post('/comments', createComment);

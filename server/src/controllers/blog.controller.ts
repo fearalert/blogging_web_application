@@ -4,20 +4,24 @@ import prisma from '../models/prismaClient';
 export const createBlogPost = async (req: Request, res: Response) => {
     const { title, content, categoryID, tags } = req.body;
 
-    try {
-        const existingTags = await prisma.tag.findMany({ where: { id: { in: tags } } });
-        if (existingTags.length !== tags.length) {
-            return res.status(400).json({ error: 'One or more tags do not exist.' });
-        }
+    const authorID = req.body.userId;
 
+     // Validate authorID
+     if (!authorID) {
+        return res.status(400).json({ error: 'Author ID is required.' });
+    }
+
+    try {
         const blogPost = await prisma.blogPost.create({
             data: {
                 title,
                 content,
-                authorID: req.body.userId,
-                categoryID,
+                author: { connect: { id: authorID } },
+                category: { connect: { id: categoryID } },
                 tags: {
-                    create: existingTags.map(tag => ({ tag: { connect: { id: tag.id } } })),
+                    create: tags.map((tagId: number) => ({
+                        tag: { connect: { id: tagId } },
+                    })),
                 },
             },
         });
@@ -60,9 +64,10 @@ export const updateBlogPost = async (req: Request, res: Response) => {
             data: {
                 title,
                 content,
-                categoryID,
+                category: { connect: { id: categoryID } },
                 tags: {
-                    set: tags.map((tagId: number) => ({ tagID: tagId })),
+                    set: [], 
+                    connect: tags.map((tagId: number) => ({ id: tagId })),
                 },
             },
         });
