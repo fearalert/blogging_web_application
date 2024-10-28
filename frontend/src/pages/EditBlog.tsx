@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BlogPost } from "../interfaces/interfaces";
+import { BlogPost, Category, Tag } from "../interfaces/interfaces";
 import { useAuth } from "../context/useAuth";
 import Navbar from "../components/Navbar";
 
@@ -13,8 +13,10 @@ const EditBlog = () => {
   const [error, setError] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [categoryID, setCategoryID] = useState<number | string>("");
-  const [tags, setTags] = useState<number[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,8 +44,8 @@ const EditBlog = () => {
         setBlog(fetchedBlog);
         setTitle(fetchedBlog.title);
         setContent(fetchedBlog.content);
-        setCategoryID(fetchedBlog.category.id);
-        setTags(fetchedBlog.tags.map((tag: { id: number }) => tag.id));
+        setSelectedCategory(fetchedBlog.category.id);
+        setSelectedTags(fetchedBlog.tags.map((tag: { id: number }) => tag.id));
       } catch (error) {
         console.error("Error fetching blog", error);
         setError("Failed to fetch blog");
@@ -52,8 +54,34 @@ const EditBlog = () => {
       }
     };
 
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/v1/categories');
+        setCategories(response.data);
+      } catch (err) {
+        setError(String(err));
+      }
+    };
+
+    const fetchTags = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/v1/tags');
+        setTags(response.data);
+      } catch (err) {
+        setError(String(err));
+      }
+    };
+
     fetchBlog();
+    fetchCategories();
+    fetchTags();
   }, [id, token, user, navigate]);
+
+  const handleTagChange = (tagID: number) => {
+    setSelectedTags((prevTags) =>
+      prevTags.includes(tagID) ? prevTags.filter((id) => id !== tagID) : [...prevTags, tagID]
+    );
+  };
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,8 +94,8 @@ const EditBlog = () => {
       const updatedBlog = {
         title,
         content,
-        categoryID,
-        tags,
+        categoryID: selectedCategory,
+        tags: selectedTags,
       };
 
       await axios.put(`http://localhost:4000/api/v1/blogs/${id}`, updatedBlog, {
@@ -121,23 +149,36 @@ const EditBlog = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Category ID</label>
-            <input
-              type="number"
-              value={categoryID}
-              onChange={(e) => setCategoryID(Number(e.target.value))}
+            <label className="block text-gray-700 text-sm font-bold mb-2">Select Category:</label>
+            <select
+              value={selectedCategory || ''}
+              onChange={(e) => setSelectedCategory(Number(e.target.value))}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               required
-            />
+            >
+              <option value="">Select a category</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Tags (comma-separated IDs)</label>
-            <input
-              type="text"
-              value={tags.join(",")}
-              onChange={(e) => setTags(e.target.value.split(",").map((tag) => Number(tag.trim())))}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
+            <label className="block text-gray-700 text-sm font-bold mb-2">Select Tags:</label>
+            <div className="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <label key={tag.id} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={selectedTags.includes(tag.id)}
+                    onChange={() => handleTagChange(tag.id)}
+                    className="mr-2"
+                  />
+                  {tag.name}
+                </label>
+              ))}
+            </div>
           </div>
           <button
             type="submit"
