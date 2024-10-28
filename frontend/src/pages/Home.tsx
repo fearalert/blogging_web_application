@@ -1,167 +1,70 @@
+import Navbar from '../components/Navbar';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Calendar, MessageCircle, Tag as TagIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { BlogPost } from '../interfaces/interfaces';
 
-interface Tag {
-  id: number;
-  name: string;
-}
-
-interface Author {
-  id: number;
-  email: string;
-}
-
-interface Comment {
-  id: number;
-  content: string;
-  postID: number;
-  authorID: number;
-  createdAt: string;
-}
-
-interface Blog {
-  id: number;
-  title: string;
-  content: string;
-  authorID: number;
-  createdAt: string;
-  categoryID: number;
-  author: Author;
-  comments: Comment[];
-  category: {
-    id: number;
-    name: string;
-  };
-  tags: {
-    blogPostID: number;
-    tagID: number;
-    tag: Tag;
-  }[];
-}
-
-const Home = () => {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+const HomePage = () => {
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/v1/blog/');
-        if (Array.isArray(response.data)) {
-          setBlogs(response.data);
-        } else {
-          console.error('Unexpected data structure:', response.data);
-        }
+        const response = await axios.get('http://localhost:4000/api/v1/blogs');
+        setBlogs(response.data);
       } catch (error) {
-        console.error('Error fetching blogs:', error);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching blogs", error);
       }
     };
+
     fetchBlogs();
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <h1 className="text-4xl font-bold text-gray-800">My Blog</h1>
-          <p className="mt-2 text-gray-600">Welcome to my corner of the internet</p>
-        </div>
-      </header>
+    <div className="bg-gradient-to-r from-blue-500 to-purple-500 min-h-screen text-gray-800">
+      <Navbar />
 
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            {loading ? (
-              <div className="bg-white p-8 rounded-lg shadow">
-                <p className="text-center text-gray-600">Loading blogs...</p>
-              </div>
-            ) : (
-              <div className="space-y-8">
-                {blogs.map((blog) => (
-                  <article key={blog.id} className="bg-white rounded-lg shadow overflow-hidden">
-                    <div className="p-6">
-                      <h2 className="text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors">
-                        {blog.title}
-                      </h2>
-                      
-                      <div className="flex items-center space-x-4 mt-4 text-sm text-gray-500">
-                        <div className="flex items-center">
-                          <Calendar size={16} className="mr-2" />
-                          {new Date(blog.createdAt).toLocaleDateString()}
-                        </div>
-                        <div className="flex items-center">
-                          <MessageCircle size={16} className="mr-2" />
-                          {blog.comments.length} comments
-                        </div>
-                      </div>
+      <section className="flex flex-col items-center text-center py-20 px-4 bg-white">
+        <h2 className="text-4xl font-bold text-gray-800 mb-4">Welcome to Blogger</h2>
+        <p className="text-gray-600 max-w-lg mb-6">
+          Discover the latest blog posts, trends, and insights from diverse categories. Connect, read, and explore!
+        </p>
+        <button className="bg-gradient-to-r from-red-400 to-blue-500 text-white font-semibold py-2 px-6 rounded-md hover:shadow-lg transition">
+          Explore Blogs
+        </button>
+      </section>
 
-                      <div className="mt-4 text-gray-600 leading-relaxed">
-                        {blog.content}
-                      </div>
-
-                      <div className="mt-6 flex items-center space-x-4">
-                        <div className="flex items-center text-sm text-gray-500">
-                          <TagIcon size={16} className="mr-2" />
-                          {blog.category.name}
-                        </div>
-                        <span className="text-gray-300">|</span>
-                        <div className="text-sm text-gray-500">
-                          By <span className="text-blue-600">{blog.author.email}</span>
-                        </div>
-                      </div>
-
-                      {/* Comments Section */}
-                      <div className="mt-8 space-y-4">
-                        <h3 className="text-lg font-semibold text-gray-800">Comments</h3>
-                        {blog.comments.length > 0 ? (
-                          blog.comments.map((comment) => (
-                            <div key={comment.id} className="bg-gray-50 p-4 rounded-lg">
-                              <p className="text-gray-700">{comment.content}</p>
-                              <p className="mt-2 text-xs text-gray-500">
-                                {new Date(comment.createdAt).toLocaleDateString()}
-                              </p>
-                            </div>
-                          ))
-                        ) : (
-                          <p className="text-gray-500">No comments yet. Be the first to comment!</p>
-                        )}
-                      </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* About Widget */}
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">About</h2>
-              <p className="text-gray-600">Welcome to my blog where I share my thoughts and experiences.</p>
-            </div>
-
-            {/* Categories Widget */}
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Categories</h2>
-              <div className="space-y-2">
-                {Array.from(new Set(blogs.map(blog => blog.category.name))).map((category) => (
-                  <div key={category} className="flex items-center text-gray-600 hover:text-blue-600 cursor-pointer">
-                    <TagIcon size={16} className="mr-2" />
-                    {category}
-                  </div>
-                ))}
+      <section className="py-16 px-6 bg-gray-50">
+        <h3 className="text-3xl font-semibold text-center mb-8 text-gray-800">Featured Blogs</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {blogs.map((blog) => (
+            <div key={blog.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
+              <div className="h-48 bg-cover bg-center" style={{ backgroundImage: 'url("https://via.placeholder.com/400")' }}></div>
+              <div className="p-6">
+                <h4 className="text-2xl font-semibold text-gray-800 mb-2">{blog.title}</h4>
+                <p className="text-gray-600 mb-4">
+                  {blog.content.slice(0, 100)}...
+                </p>
+                <div className="text-sm text-gray-500 mb-2">
+                  <strong>Category:</strong> {blog.category.name}
+                </div>
+                <div className="text-sm text-gray-500 mb-2">
+                  <strong>Tags:</strong> {blog.tags.map(tag => tag.tag.name).join(', ')}
+                </div>
+                <Link to={`/blog/${blog.id}`} className="text-blue-500 font-medium hover:underline">
+                  Read More
+                </Link>
               </div>
             </div>
-          </div>
+          ))}
         </div>
-      </main>
+      </section>
+
+      <footer className="bg-white py-6 text-center text-gray-600">
+        <p>&copy; 2024 Blogger. All rights reserved.</p>
+      </footer>
     </div>
   );
 };
 
-export default Home;
+export default HomePage;
