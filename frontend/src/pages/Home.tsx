@@ -29,9 +29,9 @@ const HomePage = () => {
         <p className="text-gray-600 max-w-lg mb-6">
           Discover the latest blog posts, trends, and insights from diverse categories. Connect, read, and explore!
         </p>
-        <button className="bg-gradient-to-r from-red-400 to-blue-500 text-white font-semibold py-2 px-6 rounded-md hover:shadow-lg transition">
-          Explore Blogs
-        </button>
+        <Link to="/create" className="bg-gradient-to-r from-red-400 to-blue-500 text-white font-semibold py-2 px-6 rounded-md hover:shadow-lg transition">
+          Create  a Blog Post
+        </Link>
       </section>
 
       <section className="py-16 px-6 bg-gray-50">

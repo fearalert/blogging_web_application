@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from "../context/useAuth";
 import { Link } from "react-router-dom";
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
     const { user, logout } = useAuth();
     const [showDropdown, setShowDropdown] = useState(false);
     const [showDrawer, setShowDrawer] = useState(false);

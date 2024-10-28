@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-// import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -11,20 +10,20 @@ import ProtectedRoute from './context/ProtectedRoute';
 import EditBlog from './pages/EditBlog';
 import CategoryManagement from './pages/CategoryManagement';
 import TagManagement from './pages/TagManagement';
+import NotFound from './components/NotFound';
 
 const App = () => {
   return (
     <AuthProvider>
       <Router>
-        {/* <Navbar /> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/create" element={
-             <ProtectedRoute>
-                <CreateBlog />
-           </ProtectedRoute>
+            <ProtectedRoute>
+              <CreateBlog />
+            </ProtectedRoute>
           } />
           <Route path="/blogs" element={
             <ProtectedRoute>
@@ -48,6 +47,7 @@ const App = () => {
           } />
           <Route path="/blog/:id" element={<BlogDetailPage />} />
           <Route path="/edit/:id" element={<EditBlog />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </AuthProvider>

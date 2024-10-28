@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../context/useAuth";
 import Navbar from "../components/Navbar";
-
-interface Tag {
-  id: number;
-  name: string;
-}
+import { Tag } from "@/interfaces/interfaces";
 
 const TagManagement = () => {
   const { token } = useAuth();

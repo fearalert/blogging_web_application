@@ -1,5 +1,3 @@
-// src/pages/CreateBlogPostPage.tsx
-
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/useAuth';
@@ -7,7 +5,7 @@ import { Category, Tag, CreateBlogPostResponse } from '../interfaces/interfaces'
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
-const CreateBlogPostPage: React.FC = () => {
+const CreateBlogPostPage = () => {
     const { token, user } = useAuth();
     const [title, setTitle] = useState<string>('');
     const [content, setContent] = useState<string>('');
