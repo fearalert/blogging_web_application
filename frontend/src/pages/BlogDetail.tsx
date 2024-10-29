@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { BlogPost, Comment } from '../interfaces/interfaces';
-import { useAuth } from '../context/useAuth';
+import { useAuth } from '../hooks/useAuth';
 
 const BlogDetailPage = () => {
     const { id } = useParams<{ id: string }>();

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../context/useAuth";
+import { useAuth } from "../hooks/useAuth";
 import Navbar from "../components/Navbar";
 import { Category } from "@/interfaces/interfaces";
 

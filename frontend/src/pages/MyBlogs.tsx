@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { BlogPost, Tag, Category } from "../interfaces/interfaces";
-import { useAuth } from "../context/useAuth"; 
+import { useAuth } from "../hooks/useAuth"; 
 import Navbar from "../components/Navbar";
 
 const MyBlogs = () => {

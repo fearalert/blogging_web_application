@@ -1,17 +1,46 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAuth } from "../context/useAuth";
+import { useAuth } from "../hooks/useAuth";
+import { validateEmail, validatePassword } from "../utils/validation";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  const validateForm = () => {
+    let isValid = true;
+
+    if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address.");
+      isValid = false;
+    } else {
+      setEmailError("");
+    }
+
+    if (!validatePassword(password)) {
+      setPasswordError("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+      isValid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    return isValid;
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       const response = await axios.post("http://localhost:4000/api/v1/login", {
         email,
@@ -50,6 +79,7 @@ const LoginPage = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
+              {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
             </label>
             <label className="relative mb-4">
               <span className="absolute left-3 top-2 text-gray-500"><i className="fas fa-lock"></i></span>
@@ -61,6 +91,7 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
             </label>
             <div className="flex items-center justify-between mb-4">
               <label className="flex items-center text-gray-500">

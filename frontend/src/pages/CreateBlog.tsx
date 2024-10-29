@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from '../context/useAuth';
+import { useAuth } from '../hooks/useAuth';
 import { Category, Tag, CreateBlogPostResponse } from '../interfaces/interfaces';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
