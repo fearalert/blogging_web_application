@@ -8,4 +8,4 @@ This app is not in the final stage
 ##Frontend
 
 Access the front end through:
-[Front-end-live)(https://blogging-web-application-seven.vercel.app/)
+[View Live Deployment](https://blogging-web-application-seven.vercel.app/)
