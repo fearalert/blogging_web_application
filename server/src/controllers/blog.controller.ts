@@ -59,6 +59,15 @@ export const updateBlogPost = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { title, content, categoryID, tags } = req.body;
 
+    if (!categoryID) {
+        return res.status(400).json({ error: 'Category is required' });
+    }
+    if (!tags || tags.length === 0) {
+        return res.status(400).json({ error: 'At least one tag is required' });
+    }
+
+    const validTags = tags.filter((tagId: number | null) => tagId !== null && tagId !== undefined);
+
     try {
         const existingBlogPost = await prisma.blogPost.findUnique({
             where: { id: Number(id) },
@@ -75,8 +84,10 @@ export const updateBlogPost = async (req: Request, res: Response) => {
                 content,
                 category: { connect: { id: categoryID } },
                 tags: {
-                    set: [],
-                    connect: tags.map((tagId: number) => ({ id: tagId })),
+                    deleteMany: {}, 
+                    create: validTags.map((tagId: number) => ({
+                        tag: { connect: { id: tagId } },
+                    })),
                 },
             },
         });
@@ -93,17 +104,33 @@ export const updateBlogPost = async (req: Request, res: Response) => {
     }
 };
 
+
 export const deleteBlogPost = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     try {
-        await prisma.blogPost.delete({ where: { id: Number(id) } });
+        await prisma.$transaction(async (prisma) => {
+            await prisma.comment.deleteMany({
+                where: { postID: Number(id) },
+            });
+
+            await prisma.blogPost.delete({
+                where: { id: Number(id) },
+            });
+        });
+
         res.status(204).send();
     } catch (error) {
         console.error('Error deleting blog post:', error);
+
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            return res.status(400).json({ error: error.message });
+        }
+
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
 
 export const getBlogPostById = async (req: Request, res: Response) => {
     const { id } = req.params;

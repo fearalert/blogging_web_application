@@ -16,8 +16,9 @@ router.post('/login', login as any);
 router.post('/categories', createCategory as any);
 router.get('/categories', getCategories);
 router.put('/categories/:id', updateCategory);
-router.delete('/categories/:id', deleteCategory);
+router.delete('/categories/:id', deleteCategory as any);
 
+// Tag Routes
 router.post('/tags', createTag as any);
 router.get('/tags', getTags);
 router.put('/tags/:id', updateTag);
@@ -27,7 +28,7 @@ router.delete('/tags/:id', deleteTag);
 router.post('/blogs',authMiddleware as any, createBlogPost as any);
 router.get('/blogs', getBlogPosts);
 router.put('/blogs/:id', updateBlogPost as any);
-router.delete('/blogs/:id', deleteBlogPost);
+router.delete('/blogs/:id', deleteBlogPost as any);
 router.get('/blogs/:id', getBlogPostById as any);
 
 

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../models/prismaClient';
+import { Prisma } from '@prisma/client';
 
 export const createCategory = async (req: Request, res: Response) => {
     const { name } = req.body;
@@ -45,10 +46,25 @@ export const deleteCategory = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     try {
-        await prisma.category.delete({ where: { id: Number(id) } });
+        await prisma.$transaction(async (prisma) => {
+            await prisma.blogPost.deleteMany({
+                where: { categoryID: Number(id) },
+            });
+
+            await prisma.category.delete({
+                where: { id: Number(id) },
+            });
+        });
+
         res.status(204).send();
     } catch (error) {
         console.error('Error deleting category:', error);
+
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            return res.status(400).json({ error: error.message });
+        }
+
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+

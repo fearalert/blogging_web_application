@@ -90,6 +90,15 @@ const EditBlog = () => {
       return;
     }
 
+    if (!selectedCategory) {
+      alert("Please select a category before updating the post.");
+      return;
+    }
+    if (selectedTags.length === 0) {
+      alert("Please select at least one tag before updating the post.");
+      return;
+    }
+
     try {
       const updatedBlog = {
         title,
@@ -105,9 +114,15 @@ const EditBlog = () => {
       });
 
       navigate(`/blog/${id}`);
-    } catch (error) {
-      console.error("Error updating blog", error);
-      setError("Failed to update blog");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Error updating blog:", error);
+
+      if (error.response && error.response.data && error.response.data.error) {
+        setError(error.response.data.error);
+      } else {
+        setError("Failed to update blog");
+      }
     }
   };
 
@@ -182,16 +197,13 @@ const EditBlog = () => {
           </div>
           <button
             type="submit"
-            className="bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            Update Blog
+            Update Post
           </button>
+          {error && <p className="text-red-500 mt-4">{error}</p>}
         </form>
       </main>
-
-      <footer className="bg-white py-6 text-center text-gray-600">
-        <p>&copy; 2024 Blogger. All rights reserved.</p>
-      </footer>
     </div>
   );
 };

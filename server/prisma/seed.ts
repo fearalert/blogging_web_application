@@ -3,12 +3,14 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
+  // Create a Category
   const category = await prisma.category.create({
     data: {
       name: 'Technology',
     },
   });
 
+  // Create Tags
   const tag1 = await prisma.tag.create({
     data: { name: 'JavaScript' },
   });
@@ -17,16 +19,22 @@ async function main() {
     data: { name: 'TypeScript' },
   });
 
-  await prisma.blogPost.create({
+  // Create a BlogPost
+  const blogPost = await prisma.blogPost.create({
     data: {
       title: 'Understanding TypeScript',
       content: 'TypeScript is a superset of JavaScript...',
       categoryID: category.id,
-      tags: {
-        connect: [{ id: tag1.id }, { id: tag2.id }],
-      },
-      authorID: 1,
+      authorID: 1, // Replace with a valid User ID from your database
     },
+  });
+
+  // Link Tags to BlogPost through BlogPostTag model
+  await prisma.blogPostTag.createMany({
+    data: [
+      { blogPostID: blogPost.id, tagID: tag1.id },
+      { blogPostID: blogPost.id, tagID: tag2.id },
+    ],
   });
 }
 
