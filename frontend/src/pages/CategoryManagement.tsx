@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 import Navbar from "../components/Navbar";
 import { Category } from "@/interfaces/interfaces";
-
 
 const CategoryManagement = () => {
   const { token } = useAuth();
@@ -13,7 +12,7 @@ const CategoryManagement = () => {
   const [categoryName, setCategoryName] = useState("");
   const [editingCategoryId, setEditingCategoryId] = useState<number | null>(null);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     if (!token) {
       setError("No authentication token found");
       return;
@@ -32,11 +31,11 @@ const CategoryManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchCategories();
-  });
+  }, [fetchCategories, token]);
 
   const handleCreateOrUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,9 +76,10 @@ const CategoryManagement = () => {
   const handleDelete = async (categoryId: number) => {
     if (!token) {
       setError("No authentication token found");
+      alert("No authentication token found");
       return;
     }
-
+  
     try {
       await axios.delete(`http://localhost:4000/api/v1/categories/${categoryId}`, {
         headers: {
@@ -87,11 +87,17 @@ const CategoryManagement = () => {
         },
       });
       await fetchCategories();
-    } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       console.error("Error deleting category", error);
-      setError("Failed to delete category");
+      let errorMessage = "Failed to delete category";
+      if (error.response && error.response.data) {
+        errorMessage = error.response.data.error || errorMessage;
+      }
+      alert(errorMessage); 
     }
   };
+  
 
   if (loading) {
     return <p>Loading...</p>;

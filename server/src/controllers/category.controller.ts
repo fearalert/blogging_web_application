@@ -46,14 +46,16 @@ export const deleteCategory = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     try {
-        await prisma.$transaction(async (prisma) => {
-            await prisma.blogPost.deleteMany({
-                where: { categoryID: Number(id) },
-            });
+        const associatedPosts = await prisma.blogPost.findMany({
+            where: { categoryID: Number(id) },
+        });
 
-            await prisma.category.delete({
-                where: { id: Number(id) },
-            });
+        if (associatedPosts.length > 0) {
+            return res.status(400).json({ error: 'Cannot delete category with associated blog posts.' });
+        }
+
+        await prisma.category.delete({
+            where: { id: Number(id) },
         });
 
         res.status(204).send();
@@ -67,4 +69,3 @@ export const deleteCategory = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
-
