@@ -8,7 +8,7 @@ This Blogging Web Application is a full-stack application that allows users to c
 ## Project Structure
 
 - **Frontend Directory**: `frontend`
-- **Backend Directory**: `backend`
+- **Backend Directory**: `server`
 
 ---
 
