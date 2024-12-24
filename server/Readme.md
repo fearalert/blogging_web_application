@@ -18,11 +18,7 @@ server/
 │   ├── models/
 │   │   └── prismaClient.ts
 │   ├── routes/
-│   │   ├── auth.routes.ts
-│   │   ├── blog.routes.ts
-│   │   ├── category.routes.ts
-│   │   ├── comment.routes.ts
-│   │   └── tag.routes.ts
+│   │   ├── routes.ts
 │   ├── utils/
 │   │   └── jwt.utils.ts
 │   ├── app.ts
