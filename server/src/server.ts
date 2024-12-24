@@ -6,11 +6,13 @@ const PORT = process.env.PORT || 3000;
 const testConnection = async () => {
   try {
     const users = await prisma.user.findMany();
-    console.log('Connection successful, users:', users[0].email);
+    if (users.length > 0) {
+      console.log(users[0].email);
+    } else {
+      console.log('No users found in the database.');
+    }
   } catch (error) {
     console.error('Error connecting to the database:', error);
-  } finally {
-    await prisma.$disconnect();
   }
 };
 

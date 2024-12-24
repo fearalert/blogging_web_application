@@ -48,7 +48,7 @@ const HomePage = () => {
   }, [selectedTag, selectedCategory, blogs]);
 
   return (
-    <div className="bg-gradient-to-r from-blue-500 to-purple-500 min-h-screen text-gray-800">
+    <div className="bg-white min-h-screen text-gray-800">
       <Navbar />
 
       <section className="flex flex-col items-center text-center py-20 px-4 bg-white">
@@ -111,7 +111,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      <footer className="bg-white py-6 text-center text-gray-600">
+      <footer className="bg-white py-6 text-center text-gray-600 fixed left-0 bottom-0 right-0">
         <p>&copy; 2024 Blogger. All rights reserved.</p>
       </footer>
     </div>
