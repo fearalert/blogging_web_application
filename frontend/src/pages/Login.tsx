@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 import { validateEmail, validatePassword } from "../utils/validation";
+import TextField from "../components/TextField";
+import { FaEnvelope, FaLock } from "react-icons/fa";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -60,39 +62,16 @@ const LoginPage = () => {
     <div className="flex h-screen items-center justify-center bg-gradient-to-r from-blue-500 to-purple-500">
       <div className="flex w-full max-w-4xl items-center justify-between bg-white shadow-lg rounded-lg p-8">
         <div className="hidden md:flex flex-col items-center justify-center w-1/2">
-          <h2 className="text-2xl font-bold mb-4">Lorem Ipsum</h2>
-          <p className="text-center text-gray-600 mb-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
+          <h2 className="text-2xl font-bold mb-4">Login</h2>
+          <p className="text-center italic text-gray-600 mb-4">
+            Welcome back to your creative haven—log in to share your stories, connect with fellow writers, and keep your inspiration alive!          </p>
         </div>
         <div className="flex flex-col w-full md:w-1/2 p-8">
           <h2 className="text-center text-2xl font-semibold mb-6">Blog Login</h2>
           {error && <p className="text-red-500 text-center">{error}</p>}
           <form className="flex flex-col" onSubmit={handleLogin}>
-            <label className="relative mb-4">
-              <span className="absolute left-3 top-2 text-gray-500"><i className="fas fa-envelope"></i></span>
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full pl-10 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
-            </label>
-            <label className="relative mb-4">
-              <span className="absolute left-3 top-2 text-gray-500"><i className="fas fa-lock"></i></span>
-              <input
-                type="password"
-                placeholder="Password"
-                className="w-full pl-10 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
-            </label>
+          <TextField type={"email"} placeholder={"Enter your email"} value={email} error={emailError} onChange={(e) => setEmail(e.target.value)} icon={<FaEnvelope/>}/>
+          <TextField type={"password"} placeholder={"Enter your password"} value={password} error={passwordError} onChange={(e) => setPassword(e.target.value)} icon={<FaLock/>}/>
             <div className="flex items-center justify-between mb-4">
               <label className="flex items-center text-gray-500">
                 <input type="checkbox" className="mr-2" />
