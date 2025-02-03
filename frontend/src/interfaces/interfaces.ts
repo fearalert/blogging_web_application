@@ -19,9 +19,7 @@ export interface Tag {
 }
 
 export interface Comment {
-    author: {
-        email: string
-    };
+    author: User;
     id: number;
     content: string;
     postID: number;

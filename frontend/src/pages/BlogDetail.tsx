@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
 import { BlogPost, Comment } from '../interfaces/interfaces';
 import { useAuth } from '../hooks/useAuth';
+import {
+    getBlogPost,
+    addComment,
+    updateComment,
+    deleteComment
+} from '../services/blogs.services';
 
 const BlogDetailPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -18,10 +23,14 @@ const BlogDetailPage = () => {
     useEffect(() => {
         const fetchBlogPost = async () => {
             try {
-                const response = await axios.get(`http://localhost:4000/api/v1/blogs/${id}`);
-                const blogPost: BlogPost = response.data;
-                setBlog(blogPost);
-                setComments(blogPost.comments);
+                if (id) {
+                    const blogPost = await getBlogPost(id);
+                    setBlog(blogPost);
+                    setComments(blogPost.comments);
+                } else {
+                    setError("Blog post not found.");
+                    setLoading(false);
+                }
             } catch (error) {
                 console.error("Error fetching blog post", error);
                 setError("Blog post not found.");
@@ -42,11 +51,11 @@ const BlogDetailPage = () => {
         }
 
         try {
-            const response = await axios.post(`http://localhost:4000/api/v1/blogs/${id}/comments`, {
-                content: newComment,
-                userId: user.id,
-            });
-            setComments((prev) => [...prev, response.data]);
+            if (!id) {
+                throw new Error("Blog post ID is missing.");
+            }
+            const newCommentData = await addComment(id, user?.id, newComment);
+            setComments((prev) => [...prev, newCommentData]);
             setNewComment('');
         } catch (error) {
             console.error('Error adding comment', error);
@@ -62,12 +71,10 @@ const BlogDetailPage = () => {
     const handleUpdateComment = async (event: React.FormEvent<HTMLFormElement>, commentId: number) => {
         event.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:4000/api/v1/comments/${commentId}`, {
-                content: editCommentContent,
-            });
+            const updatedComment = await updateComment(commentId, editCommentContent);
             setComments((prev) =>
                 prev.map((comment) =>
-                    comment.id === commentId ? response.data : comment
+                    comment.id === commentId ? updatedComment : comment
                 )
             );
             setEditCommentId(null);
@@ -80,7 +87,7 @@ const BlogDetailPage = () => {
 
     const handleDeleteComment = async (commentId: number) => {
         try {
-            await axios.delete(`http://localhost:4000/api/v1/comments/${commentId}`);
+            await deleteComment(commentId);
             setComments((prev) => prev.filter((comment) => comment.id !== commentId));
         } catch (error) {
             console.error('Error deleting comment', error);
@@ -101,7 +108,7 @@ const BlogDetailPage = () => {
     }
 
     return (
-        <div className="bg-gradient-to-r from-blue-500 to-purple-500 min-h-screen text-gray-800">
+        <div className="bg-gradient-to-r from-blue-500 to-purple-500 min-h-full text-gray-800">
             <header className="bg-white shadow-md py-4 px-6">
                 <Link to="/" className="text-blue-500 hover:underline">
                     &larr; Back to Home
@@ -138,7 +145,12 @@ const BlogDetailPage = () => {
                     {comments.length > 0 ? (
                         comments.map((comment: Comment) => (
                             <div key={comment.id} className="border-b border-gray-200 py-2">
-                                <p className="text-blue-800 font-semibold"> Author ID: {comment.authorID}</p>
+                                {comment.author ? (
+                                    <p className="text-blue-800 font-semibold"> Author: {comment.author.email}</p>
+                                ) : (
+                                    <p className="text-blue-800 font-semibold"> Author: Unknown</p>
+                                )}
+
                                 {editCommentId === comment.id ? (
                                     <form onSubmit={(e) => handleUpdateComment(e, comment.id)} className="mb-2">
                                         <textarea
@@ -175,6 +187,7 @@ const BlogDetailPage = () => {
                                     </>
                                 )}
                             </div>
+
                         ))
                     ) : (
                         <p className="text-gray-600">No comments yet.</p>
@@ -182,7 +195,7 @@ const BlogDetailPage = () => {
                 </div>
             </section>
 
-            <footer className="bg-white py-6 text-center text-gray-600">
+            <footer className="bg-white py-6 text-center text-gray-600 fixed left-0 bottom-0 right-0">
                 <p>&copy; 2024 Blogger. All rights reserved.</p>
             </footer>
         </div>

@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: blogapp-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password@123
+      POSTGRES_DB: blogapp
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blogapp-server
+    env_file:
+      - .env
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+    volumes:
+      - .:/usr/src/app
+    command: ["npm", "run", "dev:watch"]
+
+volumes:
+  postgres_data:

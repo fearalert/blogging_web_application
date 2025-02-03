@@ -12,6 +12,9 @@ export const createComment = async (req: Request, res: Response) => {
                 postID,
                 authorID: req.body.userId,
             },
+            include: {
+                author: true
+            }
         });
         res.status(201).json(comment);
     } catch (error) {
