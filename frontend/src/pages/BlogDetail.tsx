@@ -145,12 +145,7 @@ const BlogDetailPage = () => {
                     {comments.length > 0 ? (
                         comments.map((comment: Comment) => (
                             <div key={comment.id} className="border-b border-gray-200 py-2">
-                                {comment.author ? (
-                                    <p className="text-blue-800 font-semibold"> Author: {comment.author.email}</p>
-                                ) : (
-                                    <p className="text-blue-800 font-semibold"> Author: Unknown</p>
-                                )}
-
+                                <p className="text-blue-800 font-semibold"> Author: {comment.author.email}</p>
                                 {editCommentId === comment.id ? (
                                     <form onSubmit={(e) => handleUpdateComment(e, comment.id)} className="mb-2">
                                         <textarea

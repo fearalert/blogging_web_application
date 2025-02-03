@@ -39,7 +39,11 @@ export const getBlogPosts = async (req: Request, res: Response) => {
         const blogPosts = await prisma.blogPost.findMany({
             include: {
                 author: true,
-                comments: true,
+                comments: {
+                    include: {
+                        author: true
+                    }
+                },
                 category: true,
                 tags: {
                     include: {

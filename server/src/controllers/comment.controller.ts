@@ -33,6 +33,7 @@ export const getComments = async (req: Request, res: Response) => {
                 author: true
             },
         });
+        console.log(comments)
         res.json(comments);
     } catch (error) {
         console.error('Error fetching comments:', error);
